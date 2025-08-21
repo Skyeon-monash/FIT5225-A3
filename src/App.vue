@@ -1,85 +1,70 @@
-<script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
-  <RouterView />
+  <div id="app-wrapper">
+    <RouterView />
+  </div>
 </template>
 
-<style scoped>
-header {
-  line-height: 1.5;
-  max-height: 100vh;
+<script setup>
+import { onMounted } from 'vue';
+import { RouterView } from 'vue-router';
+import { useAuthStore } from './stores/auth';
+
+const authStore = useAuthStore();
+
+onMounted(() => {
+  // 当应用挂载时，初始化 Firebase auth 状态监听器
+  authStore.init();
+});
+</script>
+
+<style>
+/*
+  在这里写全局 CSS 样式。
+  这些样式会应用到整个项目的所有组件中。
+  注意：这里的 <style> 标签没有 "scoped" 属性。
+*/
+
+/* 一个好的实践是进行 CSS Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.6;
+  background-color: #f9f9f9;
+  color: #333;
 }
 
-nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
+#app-wrapper {
+  /* 如果需要，可以设置整个应用的最大宽度等 */
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-nav a.router-link-exact-active {
-  color: var(--color-text);
+button {
+  cursor: pointer;
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 1px solid #42b983;
+  background-color: #42b983;
+  color: white;
+  font-size: 1rem;
+  transition: background-color 0.2s;
 }
 
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+button:hover {
+  background-color: #36a473;
 }
 
-nav a {
-  display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
-}
-
-nav a:first-of-type {
-  border: 0;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+button:disabled {
+  background-color: #ccc;
+  border-color: #ccc;
+  cursor: not-allowed;
 }
 </style>
