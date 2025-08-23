@@ -4,7 +4,7 @@ import axios from 'axios'
 
 // --- ❗️❗️❗️ 关键配置 ❗️❗️❗️ ---
 // 将这里替换成你部署成功后，Serverless Devs 输出的 system_url
-const API_BASE_URL = 'https://get-pregned-url-mjygkihkcg.cn-beijing.fcapp.run'
+const API_BASE_URL = 'https://birdtag-backend-ezkuyfuwhm.cn-hongkong.fcapp.run'
 
 // 创建一个 Axios 实例，用于与我们的后端 API 通信
 const apiClient = axios.create({
@@ -64,18 +64,19 @@ export const apiService = {
 
   // --- 预签名 URL 获取 (❗️已升级为真实 API 调用❗️) ---
   async getPresignedUploadUrl(fileName, fileType) {
-    console.log(`[API Service] (Real) Requesting upload URL for ${fileName}`)
+    console.log(`[API Service] (Real) Requesting upload URL for ${fileName}`);
     try {
-      // 向我们部署的函数计算 API 的根路径发送 POST 请求
+      // apiClient 会自动将下面的 JS 对象转换成 JSON 字符串
       const response = await apiClient.post('/', {
         fileName: fileName,
         contentType: fileType,
-      })
-      // 后端返回的数据结构是 { uploadUrl: '...', fileId: '...' }
-      return response.data
+      });
+      return response.data;
     } catch (error) {
-      console.error('Failed to get presigned URL from backend', error)
-      throw new Error('无法从服务器获取上传地址，请检查网络或联系管理员。')
+      console.error('Failed to get presigned URL from backend', error.response ? error.response.data : error.message);
+      // ❗️ 改进错误提示，如果后端有返回错误信息，就显示出来
+      const backendError = error.response ? error.response.data.error : null;
+      throw new Error(backendError || '无法从服务器获取上传地址，请检查网络或联系管理员。');
     }
   },
 
