@@ -10,12 +10,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from urllib.request import Request, urlopen
 
+from dotenv import load_dotenv
+load_dotenv()  # 让 .env 生效
+
 log = logging.getLogger("presign")
 logging.basicConfig(level=logging.INFO)
 
-# ----------- 必填：按你的实际修改 -----------
-OSS_BUCKET   = os.getenv("OSS_BUCKET",   "birdtag-uploads-mengxihe")         # 你的桶名
-OSS_ENDPOINT = os.getenv("OSS_ENDPOINT", "https://oss-cn-hongkong.aliyuncs.com")
+OSS_BUCKET   = os.getenv("OSS_BUCKET")
+OSS_ENDPOINT = os.getenv("OSS_ENDPOINT")
 # -------------------------------------------
 
 # 生产环境强烈建议：后端运行在绑定了 RAM 角色/STS 的环境
